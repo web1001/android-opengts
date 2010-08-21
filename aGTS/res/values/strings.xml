@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
+
     <string name="app_name">aGTS</string>
 <string name="my_location">My location</string>
 <string name="map_mode">Map mode</string>
@@ -10,4 +10,11 @@
 
 <string name="latitude">Set latitude user</string>
 <string name="route">Route</string>
+<string name="wifi_title">Use any Open AP</string>
+<string name="wifi_summary">Enables aggressive automatic WiFi connection to any open AP .</string>
+<string name="precision_title">Logging precision</string>
+<string name="preference_behavior">Run settings</string>
+<string name="precision_summary">The size of interval between GPS fixes.</string>
+<string name="menu_settings">Settings</string>
+
 </resources>

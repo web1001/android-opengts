@@ -7,17 +7,22 @@ import org.andnav.osm.views.OpenStreetMapView;
 import org.andnav.osm.views.overlay.MyLocationOverlay;
 import org.andnav.osm.views.util.OpenStreetMapRendererInfo;
 
+
+import ro.sysopconsulting.SettingsDialog;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -43,6 +48,7 @@ public class GtsActivity extends Activity {
 	private static final int MENU_ROUTE = MENU_LATITUDE + 1;
 	private static final int MENU_ABOUT = MENU_ROUTE + 1;
 	private static final int MENU_INFO = MENU_ABOUT + 1;
+	private static final int MENU_SETTINGS = MENU_INFO +1;
 
 	private static final int DIALOG_ABOUT_ID = 1;
 	private static final int DIALOG_INFO_ID = 2;
@@ -169,6 +175,10 @@ public class GtsActivity extends Activity {
 		pMenu.add(0, MENU_INFO, Menu.NONE, R.string.info).setIcon(
 				android.R.drawable.ic_menu_info_details);
 
+		pMenu.add(ContextMenu.NONE, MENU_SETTINGS, ContextMenu.NONE,
+				R.string.menu_settings).setIcon(R.drawable.preferences)
+				.setAlphabeticShortcut('S');
+
 		return true;
 	}
 
@@ -194,6 +204,11 @@ public class GtsActivity extends Activity {
 
 		case MENU_INFO:
 			showDialog(DIALOG_INFO_ID);
+			return true;
+		case MENU_SETTINGS:
+			Intent i = new Intent(this, ro.sysopconsulting.SettingsDialog.class);
+
+			startActivity(i);
 			return true;
 
 		default: // Map mode submenu items

@@ -12,6 +12,7 @@
 			<meta-data android:name="user" android:value="demo" />
 			<meta-data android:name="password" android:value="demo" />
 		</activity>
+	<activity android:name="ro.sysopconsulting.SettingsDialog" android:label="@string/menu_settings"></activity>
 
 	</application>
 
