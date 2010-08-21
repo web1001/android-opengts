@@ -1,4 +1,5 @@
 // Created by cristigav on 00:23:14 - 03.10.2010
+
 package org.gc.gts;
 
 import org.andnav.osm.util.GeoPoint;
@@ -26,9 +27,11 @@ import android.widget.RelativeLayout.LayoutParams;
 
 /**
  * Default map view activity.
- * 
+ *
  * @author Cristian Gavrila
- * 
+ *
+ * @author SysOP Consulting SRL
+ *
  */
 public class GtsActivity extends Activity {
 	// ===========================================================
@@ -99,7 +102,7 @@ public class GtsActivity extends Activity {
 		this.mOsmv.getOverlays().add(this.mLocationOverlay);
 
 		this.mDevicesOverlay = DevicesTraceOverlay.getInstance(ctx, mOsmv,
-				"http://gps.info.ro/events", bundle.getString("account"),
+				bundle.getString("server"), bundle.getString("account"),
 				bundle.getString("user"), bundle.getString("password"));
 
 		this.mOsmv.getOverlays().add(this.mDevicesOverlay);
@@ -133,7 +136,7 @@ public class GtsActivity extends Activity {
 		 * edit.putBoolean(PREFS_SHOW_LOCATION, mLocationOverlay
 		 * .isMyLocationEnabled()); edit.putBoolean(PREFS_FOLLOW_LOCATION,
 		 * mLocationOverlay .isLocationFollowEnabled()); edit.commit();
-		 * 
+		 *
 		 * this.mLocationOverlay.disableMyLocation();
 		 */
 

@@ -7,17 +7,18 @@
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
+			<meta-data android:name="server" android:value="http://gps.info.ro/events" />
 			<meta-data android:name="account" android:value="sysop" />
 			<meta-data android:name="user" android:value="demo" />
 			<meta-data android:name="password" android:value="demo" />
 		</activity>
 
 	</application>
-	
+
 <uses-sdk android:minSdkVersion="3" />
 
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/> 
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 <uses-permission android:name="android.permission.INTERNET" />
 <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-</manifest> 
+</manifest>
