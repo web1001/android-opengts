@@ -1,0 +1,26 @@
+#summary One-sentence summary of this page.
+#labels Phase-Support
+
+= Introduction =
+
+OpenGTS configuration.
+
+
+= Details =
+
+For this software to work with OpenGTS server, Events servlet must be tweaked and deplyed.
+
+Events should be able to return the number of devices an user is able to read and the names for that devices in fleet.
+
+Example:
+
+http://yourserver.domain/events/track.dev?a=<account>&u=<user>&p=<passord>&d=all
+
+should return a string:
+
+4,car1,tracker2,mytracker,car2
+
+4 - number of devices
+car1 - first device
+tracker2 - second device 
+etc
