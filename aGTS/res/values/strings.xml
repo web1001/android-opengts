@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string name="app_name">aGTS</string>
+<string name="my_location">My location</string>
+<string name="map_mode">Map mode</string>
+<string name="about">About</string>
+<string name="about_message">Despre...</string>
+<string name="info">Info</string>
+
+<string name="latitude">Set latitude user</string>
+<string name="route">Route</string>
+</resources>
