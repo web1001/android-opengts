@@ -1,9 +1,9 @@
-#summary One-sentence summary of this page.
+#summary Patched EventUtil.java
 #labels Phase-Support
 
 = Introduction =
 
-Patched EventUtil.java
+EventUtil patched code
 
 
 = Details =
