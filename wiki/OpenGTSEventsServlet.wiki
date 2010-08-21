@@ -8,7 +8,7 @@ OpenGTS configuration.
 
 = Details =
 
-For this software to work with OpenGTS server, Events servlet must be tweaked and deplyed.
+For this software to work with OpenGTS server, Events servlet must be tweaked and deployed.
 
 Events should be able to return the number of devices an user is able to read and the names for that devices in fleet.
 
