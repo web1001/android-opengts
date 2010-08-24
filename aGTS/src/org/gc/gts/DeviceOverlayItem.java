@@ -53,7 +53,8 @@ public class DeviceOverlayItem extends OpenStreetMapViewOverlayItem implements
 
 			reader.close();
 
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 
@@ -109,7 +110,8 @@ public class DeviceOverlayItem extends OpenStreetMapViewOverlayItem implements
 
 						// osmv.invalidate();
 
-					} catch (Exception e) {
+					}
+					catch (Exception e) {
 						e.printStackTrace();
 					}
 				}

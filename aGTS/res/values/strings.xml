@@ -16,5 +16,9 @@
 <string name="preference_behavior">Run settings</string>
 <string name="precision_summary">The size of interval between GPS fixes.</string>
 <string name="menu_settings">Settings</string>
+<string name="service_networkstatus">Logging: %s (%s with cell tower and wifi)</string>
+<string name="service_gpsstatus">Logging: %s (%s with %d satellites)</string>
+<string name="service_start">Activating tracking</string>
+<string name="service_connectiondisabled">Network is disabled, network location logging is without effect.</string>
 
 </resources>

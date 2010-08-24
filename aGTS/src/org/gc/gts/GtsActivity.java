@@ -7,9 +7,7 @@ import org.andnav.osm.views.OpenStreetMapView;
 import org.andnav.osm.views.overlay.MyLocationOverlay;
 import org.andnav.osm.views.util.OpenStreetMapRendererInfo;
 
-
-import ro.sysopconsulting.SettingsDialog;
-
+import ro.sysopconsulting.util.Const;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -32,46 +30,48 @@ import android.widget.RelativeLayout.LayoutParams;
 
 /**
  * Default map view activity.
- *
+ * 
  * @author Cristian Gavrila
- *
+ * 
  * @author SysOP Consulting SRL
- *
+ * 
  */
 public class GtsActivity extends Activity {
 	// ===========================================================
 	// Constants
 	// ===========================================================
 
-	private static final int MENU_MY_LOCATION = Menu.FIRST;
-	private static final int MENU_LATITUDE = MENU_MY_LOCATION + 1;
-	private static final int MENU_ROUTE = MENU_LATITUDE + 1;
-	private static final int MENU_ABOUT = MENU_ROUTE + 1;
-	private static final int MENU_INFO = MENU_ABOUT + 1;
-	private static final int MENU_SETTINGS = MENU_INFO +1;
+	private static final int	MENU_MY_LOCATION		= Menu.FIRST;
+	private static final int	MENU_LATITUDE			= MENU_MY_LOCATION + 1;
+	private static final int	MENU_ROUTE				= MENU_LATITUDE + 1;
+	private static final int	MENU_ABOUT				= MENU_ROUTE + 1;
+	private static final int	MENU_INFO				= MENU_ABOUT + 1;
+	private static final int	MENU_SETTINGS			= MENU_INFO + 1;
 
-	private static final int DIALOG_ABOUT_ID = 1;
-	private static final int DIALOG_INFO_ID = 2;
-	private static final int DIALOG_LATITUDE_ID = 3;
-	private static final int DIALOG_ROUTE_FROM_ID = 4;
-	private static final int DIALOG_ROUTE_TO_ID = 5;
+	private static final int	DIALOG_ABOUT_ID			= 1;
+	private static final int	DIALOG_INFO_ID			= 2;
+	private static final int	DIALOG_LATITUDE_ID		= 3;
+	private static final int	DIALOG_ROUTE_FROM_ID	= 4;
+	private static final int	DIALOG_ROUTE_TO_ID		= 5;
 
 	// ===========================================================
 	// Fields
 	// ===========================================================
 
-	private SharedPreferences mPrefs;
-	private OpenStreetMapView mOsmv;
-	private MyLocationOverlay mLocationOverlay;
-	private DevicesTraceOverlay mDevicesOverlay;
-	private LatitudeOverlay mLatitudeOverlay;
-	private RouteOverlay mRouteOverlay;
+	private SharedPreferences	mPrefs;
+	private OpenStreetMapView	mOsmv;
+	private MyLocationOverlay	mLocationOverlay;
+	private DevicesTraceOverlay	mDevicesOverlay;
+	private LatitudeOverlay		mLatitudeOverlay;
+	private RouteOverlay		mRouteOverlay;
 
-	private Bundle bundle;
+	private Bundle				bundle;
 
-	private GeoPoint from, to;
+	private GeoPoint			from, to;
 
-	Context ctx;
+	String						TAG						= "aGTS";
+
+	Context						ctx;
 
 	// ===========================================================
 	// Constructors
@@ -83,7 +83,10 @@ public class GtsActivity extends Activity {
 
 		ctx = this;
 
-		mPrefs = getSharedPreferences("aGTS", MODE_PRIVATE);
+		mPrefs = getSharedPreferences(TAG, MODE_PRIVATE);
+
+		this.startService(new Intent(Const.SERVICENAME));
+		Log.w(TAG, "Service Started");
 
 		try {
 			ActivityInfo ai = getPackageManager().getActivityInfo(
@@ -93,7 +96,8 @@ public class GtsActivity extends Activity {
 			Log.i("Bundle:account", bundle.getString("account"));
 			Log.i("Bundle:user", bundle.getString("user"));
 			Log.i("Bundle:password", bundle.getString("password"));
-		} catch (NameNotFoundException e) {
+		}
+		catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
 
@@ -108,8 +112,8 @@ public class GtsActivity extends Activity {
 		this.mOsmv.getOverlays().add(this.mLocationOverlay);
 
 		this.mDevicesOverlay = DevicesTraceOverlay.getInstance(ctx, mOsmv,
-				bundle.getString("server"), bundle.getString("account"),
-				bundle.getString("user"), bundle.getString("password"));
+				bundle.getString("server"), bundle.getString("account"), bundle
+						.getString("user"), bundle.getString("password"));
 
 		this.mOsmv.getOverlays().add(this.mDevicesOverlay);
 
@@ -142,7 +146,7 @@ public class GtsActivity extends Activity {
 		 * edit.putBoolean(PREFS_SHOW_LOCATION, mLocationOverlay
 		 * .isMyLocationEnabled()); edit.putBoolean(PREFS_FOLLOW_LOCATION,
 		 * mLocationOverlay .isLocationFollowEnabled()); edit.commit();
-		 *
+		 * 
 		 * this.mLocationOverlay.disableMyLocation();
 		 */
 
@@ -185,33 +189,35 @@ public class GtsActivity extends Activity {
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case MENU_MY_LOCATION:
-			this.mLocationOverlay.followLocation(true);
-			this.mLocationOverlay.enableMyLocation();
-			/*
-			 * Location lastFix = this.mLocationOverlay.getLastFix(); if
-			 * (lastFix != null) this.mOsmv.setMapCenter(new GeoPoint(lastFix));
-			 */
-			return true;
+			case MENU_MY_LOCATION:
+				this.mLocationOverlay.followLocation(true);
+				this.mLocationOverlay.enableMyLocation();
+				/*
+				 * Location lastFix = this.mLocationOverlay.getLastFix(); if
+				 * (lastFix != null) this.mOsmv.setMapCenter(new
+				 * GeoPoint(lastFix));
+				 */
+				return true;
 
-		case MENU_LATITUDE:
-			showDialog(DIALOG_LATITUDE_ID);
-			return true;
+			case MENU_LATITUDE:
+				showDialog(DIALOG_LATITUDE_ID);
+				return true;
 
-		case MENU_ROUTE:
-			showDialog(DIALOG_ROUTE_FROM_ID);
-			return true;
+			case MENU_ROUTE:
+				showDialog(DIALOG_ROUTE_FROM_ID);
+				return true;
 
-		case MENU_INFO:
-			showDialog(DIALOG_INFO_ID);
-			return true;
-		case MENU_SETTINGS:
-			Intent i = new Intent(this, ro.sysopconsulting.SettingsDialog.class);
+			case MENU_INFO:
+				showDialog(DIALOG_INFO_ID);
+				return true;
+			case MENU_SETTINGS:
+				Intent i = new Intent(this,
+						ro.sysopconsulting.SettingsDialog.class);
 
-			startActivity(i);
-			return true;
+				startActivity(i);
+				return true;
 
-		default: // Map mode submenu items
+			default: // Map mode submenu items
 
 		}
 		return false;
@@ -222,130 +228,135 @@ public class GtsActivity extends Activity {
 		Dialog dialog;
 
 		switch (id) {
-		case DIALOG_ABOUT_ID:
-			return new AlertDialog.Builder(GtsActivity.this).setIcon(
-					R.drawable.icon).setTitle(R.string.app_name).setMessage(
-					R.string.about_message).setPositiveButton("OK",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-						}
-					}).create();
+			case DIALOG_ABOUT_ID:
+				return new AlertDialog.Builder(GtsActivity.this).setIcon(
+						R.drawable.icon).setTitle(R.string.app_name)
+						.setMessage(R.string.about_message).setPositiveButton(
+								"OK", new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int whichButton) {
+									}
+								}).create();
 
-		case DIALOG_INFO_ID:
-			return new AlertDialog.Builder(GtsActivity.this).setIcon(
-					R.drawable.icon).setTitle("Account info").setMessage(
-					"Account: " + bundle.getString("account") + "\nUser: "
-							+ bundle.getString("user")).setPositiveButton("OK",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-						}
-					}).create();
+			case DIALOG_INFO_ID:
+				return new AlertDialog.Builder(GtsActivity.this).setIcon(
+						R.drawable.icon).setTitle("Account info").setMessage(
+						"Account: " + bundle.getString("account") + "\nUser: "
+								+ bundle.getString("user")).setPositiveButton(
+						"OK", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+							}
+						}).create();
 
-		case DIALOG_LATITUDE_ID:
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			case DIALOG_LATITUDE_ID:
+				AlertDialog.Builder alert = new AlertDialog.Builder(this);
 
-			alert.setTitle("Set latitude account");
-			alert.setMessage("ID");
+				alert.setTitle("Set latitude account");
+				alert.setMessage("ID");
 
-			// Set an EditText view to get user input
-			final EditText input = new EditText(this);
-			input.setText(mPrefs.getString("LATITUDE_ID", ""));
-			alert.setView(input);
+				// Set an EditText view to get user input
+				final EditText input = new EditText(this);
+				input.setText(mPrefs.getString("LATITUDE_ID", ""));
+				alert.setView(input);
 
-			alert.setPositiveButton("Ok",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-							String value = input.getText().toString();
-							Log.i("Google latitude", value);
+				alert.setPositiveButton("Ok",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								String value = input.getText().toString();
+								Log.i("Google latitude", value);
 
-							if (null != mLatitudeOverlay)
-								mOsmv.getOverlays().remove(mLatitudeOverlay);
+								if (null != mLatitudeOverlay)
+									mOsmv.getOverlays()
+											.remove(mLatitudeOverlay);
 
-							mLatitudeOverlay = LatitudeOverlay.getInstance(ctx,
-									mOsmv, value);
-							// "-6518729008335465161");
+								mLatitudeOverlay = LatitudeOverlay.getInstance(
+										ctx, mOsmv, value);
+								// "-6518729008335465161");
 
-							mOsmv.getOverlays().add(mLatitudeOverlay);
+								mOsmv.getOverlays().add(mLatitudeOverlay);
 
-							mOsmv.invalidate();
+								mOsmv.invalidate();
 
-							SharedPreferences.Editor edit = mPrefs.edit();
-							edit.putString("LATITUDE_ID", value);
-							edit.commit();
-						}
-					});
+								SharedPreferences.Editor edit = mPrefs.edit();
+								edit.putString("LATITUDE_ID", value);
+								edit.commit();
+							}
+						});
 
-			alert.setNegativeButton("Cancel",
-					new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,
-								int whichButton) {
-							// Canceled.
-						}
-					});
+				alert.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int whichButton) {
+								// Canceled.
+							}
+						});
 
-			return alert.create();
+				return alert.create();
 
-		case DIALOG_ROUTE_FROM_ID:
-			AlertDialog.Builder routeDialog = new AlertDialog.Builder(this);
+			case DIALOG_ROUTE_FROM_ID:
+				AlertDialog.Builder routeDialog = new AlertDialog.Builder(this);
 
-			routeDialog.setTitle("Set route from");
+				routeDialog.setTitle("Set route from");
 
-			CharSequence[] items = { "My location", "Google latitude" };
+				CharSequence[] items = { "My location", "Google latitude" };
 
-			routeDialog.setItems(items, new DialogInterface.OnClickListener() {
+				routeDialog.setItems(items,
+						new DialogInterface.OnClickListener() {
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					from = null;
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								from = null;
 
-					if (which == 0)
-						from = mLocationOverlay.getMyLocation();
-					if (which == 1)
-						from = mLatitudeOverlay.getLocation();
+								if (which == 0)
+									from = mLocationOverlay.getMyLocation();
+								if (which == 1)
+									from = mLatitudeOverlay.getLocation();
 
-					dialog.dismiss();
+								dialog.dismiss();
 
-					showDialog(DIALOG_ROUTE_TO_ID);
-				}
-			});
+								showDialog(DIALOG_ROUTE_TO_ID);
+							}
+						});
 
-			return routeDialog.create();
+				return routeDialog.create();
 
-		case DIALOG_ROUTE_TO_ID:
-			AlertDialog.Builder routeToDialog = new AlertDialog.Builder(this);
+			case DIALOG_ROUTE_TO_ID:
+				AlertDialog.Builder routeToDialog = new AlertDialog.Builder(
+						this);
 
-			routeToDialog.setTitle("Set route to");
+				routeToDialog.setTitle("Set route to");
 
-			routeToDialog.setItems(mDevicesOverlay.getItems(),
-					new DialogInterface.OnClickListener() {
+				routeToDialog.setItems(mDevicesOverlay.getItems(),
+						new DialogInterface.OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							to = mDevicesOverlay.getLocation(which);
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								to = mDevicesOverlay.getLocation(which);
 
-							dialog.dismiss();
+								dialog.dismiss();
 
-							Log.i("Route", "from " + from + " to " + to);
+								Log.i("Route", "from " + from + " to " + to);
 
-							// add route demo overlay
-							if (null != mRouteOverlay)
-								mOsmv.getOverlays().remove(mRouteOverlay);
+								// add route demo overlay
+								if (null != mRouteOverlay)
+									mOsmv.getOverlays().remove(mRouteOverlay);
 
-							mRouteOverlay = RouteOverlay.getInstance(ctx,
-									mOsmv, from, to);
-							mOsmv.getOverlays().add(mRouteOverlay);
-							mOsmv.invalidate();
-						}
-					});
+								mRouteOverlay = RouteOverlay.getInstance(ctx,
+										mOsmv, from, to);
+								mOsmv.getOverlays().add(mRouteOverlay);
+								mOsmv.invalidate();
+							}
+						});
 
-			return routeToDialog.create();
+				return routeToDialog.create();
 
-		default:
-			dialog = null;
-			break;
+			default:
+				dialog = null;
+				break;
 		}
 		return dialog;
 	}
