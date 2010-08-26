@@ -19,6 +19,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -117,9 +118,11 @@ public class GtsActivity extends Activity {
 
 		this.mOsmv.getOverlays().add(this.mDevicesOverlay);
 
-		if (mPrefs.getString("LATITUDE_ID", "").length() > 1) {
-			mLatitudeOverlay = LatitudeOverlay.getInstance(ctx, mOsmv, mPrefs
-					.getString("LATITUDE_ID", ""));
+		if (PreferenceManager.getDefaultSharedPreferences(ctx).getString(
+				"latitude", "").length() > 1) {
+			mLatitudeOverlay = LatitudeOverlay.getInstance(ctx, mOsmv,
+					PreferenceManager.getDefaultSharedPreferences(ctx)
+							.getString("latitude", ""));
 
 			mOsmv.getOverlays().add(mLatitudeOverlay);
 		}
