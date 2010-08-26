@@ -167,17 +167,20 @@ public class GtsActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(final Menu pMenu) {
-		pMenu.add(0, MENU_MY_LOCATION, Menu.NONE, R.string.my_location)
-				.setIcon(android.R.drawable.ic_menu_mylocation);
+		pMenu.add(ContextMenu.NONE, MENU_MY_LOCATION, Menu.NONE,
+				R.string.my_location).setIcon(
+				android.R.drawable.ic_menu_mylocation);
 
-		pMenu.add(0, MENU_LATITUDE, Menu.NONE, R.string.latitude).setIcon(
-				android.R.drawable.ic_menu_compass);
+		pMenu
+				.add(ContextMenu.NONE, MENU_LATITUDE, Menu.NONE,
+						R.string.latitude).setIcon(
+						android.R.drawable.ic_menu_compass);
 
-		pMenu.add(0, MENU_ROUTE, Menu.NONE, R.string.route).setIcon(
-				android.R.drawable.ic_menu_directions);
+		pMenu.add(ContextMenu.NONE, MENU_ROUTE, Menu.NONE, R.string.route)
+				.setIcon(android.R.drawable.ic_menu_directions);
 
-		pMenu.add(0, MENU_INFO, Menu.NONE, R.string.info).setIcon(
-				android.R.drawable.ic_menu_info_details);
+		pMenu.add(ContextMenu.NONE, MENU_INFO, Menu.NONE, R.string.info)
+				.setIcon(android.R.drawable.ic_menu_info_details);
 
 		pMenu.add(ContextMenu.NONE, MENU_SETTINGS, ContextMenu.NONE,
 				R.string.menu_settings).setIcon(R.drawable.preferences)
