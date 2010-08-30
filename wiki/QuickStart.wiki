@@ -12,4 +12,4 @@ To configure your server, OpenGTS account, user and password, please check `Andr
 
 Of course, we provide a free server for test and private use only at:
 
-[http://www.sysoptrack.org/]http://www.sysoptrack.org/
+[http://www.sysoptrack.org/ SysopTrack.org]
