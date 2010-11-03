@@ -7,13 +7,12 @@
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
-			<meta-data android:name="server" android:value="http://gps.info.ro/events" />
+			<meta-data android:name="server" android:value="http://www.dantek-gpstrack.ro/events" />
 			<meta-data android:name="account" android:value="sysop" />
 			<meta-data android:name="user" android:value="demo" />
 			<meta-data android:name="password" android:value="demo" />
 		</activity>
 	<activity android:name="ro.sysopconsulting.SettingsDialog" android:label="@string/menu_settings"></activity>
-
 
 	    <service android:name="ro.sysopconsulting.gts.logger.OpenGTStracker" android:enabled="true">
     <intent-filter android:label="GTSlogger">
