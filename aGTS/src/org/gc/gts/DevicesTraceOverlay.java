@@ -35,6 +35,20 @@ import android.widget.Toast;
 public class DevicesTraceOverlay extends
 		OpenStreetMapViewItemizedOverlay<DeviceTraceOverlayItem> {
 
+	private static ArrayList<GeoPoint>	path;
+
+	/**
+	 * @return the path
+	 */
+	public static ArrayList<GeoPoint> getPath() {
+		Log.d("aGTS", "StartPoints = " + path.toString());
+		if (path.isEmpty()) {
+			GeoPoint sp = new GeoPoint(46.1828, 21.3234);
+			path.add(sp);
+		}
+		return path;
+	}
+
 	private DevicesTraceOverlay(Context ctx,
 			List<DeviceTraceOverlayItem> aList, Drawable pMarker,
 			Point pMarkerHotspot,
@@ -48,25 +62,55 @@ public class DevicesTraceOverlay extends
 		final ArrayList<DeviceTraceOverlayItem> devices = new ArrayList<DeviceTraceOverlayItem>();
 
 		try {
-			URL url = new URL(server + "/image.dev?a=" + account + "&u=" + user
-					+ "&p=" + password + "&d=all");
+			URL url = new URL(server + "/Data.kml?a=" + account + "&u=" + user
+					+ "&p=" + password + "&l=1&g=all");
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					url.openStream()));
+			String line;
+			double lon = 0, lat = 0;
+			int precision = 0;
+			// start Path, ArryList of all GeoPoints
+			ArrayList<GeoPoint> sPath = new ArrayList<GeoPoint>();
 
-			String line = reader.readLine();
+			while ((line = reader.readLine()) != null) {
+				if (line.trim().startsWith("<name>")) {
+					line = line.substring(line.indexOf("me>") + 3);
 
-			String[] values = line.split(",");
+					String name = line.substring(0, line.indexOf('<'));
+					Log.d("aGTS", "DevicesTraceOverlay name " + name);
+					devices.add(DeviceTraceOverlayItem.getInstance(osmv,
+							server, account, user, password, name));
+				}
 
-			int nr = Integer.parseInt(values[0]);
+				if (line.trim().startsWith("<Point><coordinates>")) {
+					line = line.substring(line.indexOf("es>") + 3);
 
-			for (int i = 1; i <= nr; i++)
-				devices.add(DeviceTraceOverlayItem.getInstance(osmv, server,
-						account, user, password, values[i]));
+					lon = Double.parseDouble(line.substring(0,
+							line.indexOf(',')));
+
+					line = line.substring(line.indexOf(',') + 1);
+
+					lat = Double.parseDouble(line.substring(0,
+							line.indexOf(',')));
+
+					line = line.substring(line.indexOf(',') + 1);
+
+					precision = Integer.parseInt(line.substring(0,
+							line.indexOf("</")));
+
+					Log.i("device", "lat=" + lat + ", lon=" + lon
+							+ ", precision=" + precision);
+
+					sPath.add(new GeoPoint(lat, lon));
+				}
+			}
 
 			reader.close();
+			path = sPath;
 
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 

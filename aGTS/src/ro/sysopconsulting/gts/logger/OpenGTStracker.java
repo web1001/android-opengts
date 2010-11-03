@@ -31,10 +31,10 @@ import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
+import android.location.GpsStatus.Listener;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.GpsStatus.Listener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
@@ -88,7 +88,7 @@ public class OpenGTStracker extends Service {
 	private NetworkScanReceiver					mNetworkScanReceiver;
 
 	private String								account							= "sysop";
-	private String								server							= "gps.info.ro";
+	private String								server							= "www.dantek-gpstrack.ro";
 	private String								servletPath						= "/gprmc";
 
 	private int									mStatusCode;
@@ -101,29 +101,21 @@ public class OpenGTStracker extends Service {
 																					@Override
 																					public void run() {
 																						// TODO
-																						// Auto-generated
-																						// method
-																						// stub
 																						if (mLoggingState != Const.LOGGING) {
-																							handler
-																									.post(new Runnable() {
-																										public void run() {
-																											Log
-																													.d(
-																															TAG,
-																															"Periodic Update of Services.");
-																											resumeLogging();
+																							handler.post(new Runnable() {
+																								public void run() {
+																									Log.d(TAG,
+																											"Periodic Update of Services.");
+																									resumeLogging();
 
-																										}
+																								}
 
-																									});
+																							});
 																						} else {
 
-																							Log
-																									.w(
-																											TAG,
-																											"Device Notes:"
-																													+ mHeaderValue);
+																							Log.w(TAG,
+																									"Device Notes:"
+																											+ mHeaderValue);
 																						}
 																					}
 
@@ -133,13 +125,10 @@ public class OpenGTStracker extends Service {
 																					public void onSharedPreferenceChanged(
 																							SharedPreferences sharedPreferences,
 																							String key) {
-																						Log
-																								.d(
-																										TAG,
-																										"Shared preferences changed: "
-																												+ key);
-																						if (key
-																								.equals(Const.PRECISION)) {
+																						Log.d(TAG,
+																								"Shared preferences changed: "
+																										+ key);
+																						if (key.equals(Const.PRECISION)) {
 																							requestLocationUpdates();
 																							setupNotification();
 
@@ -210,11 +199,9 @@ public class OpenGTStracker extends Service {
 																											mSatellites++;
 																										}
 																									}
-																									Log
-																											.d(
-																													TAG,
-																													"New GPS Event: "
-																															+ event);
+																									Log.d(TAG,
+																											"New GPS Event: "
+																													+ event);
 																									updateNotification();
 																									break;
 																								default:
@@ -435,9 +422,8 @@ public class OpenGTStracker extends Service {
 	private LocationListener	mLocationListener	= new LocationListener() {
 														public void onLocationChanged(
 																Location location) {
-															Log
-																	.d(TAG,
-																			"onLocationChanged");
+															Log.d(TAG,
+																	"onLocationChanged");
 															Location filteredLocation = locationFilter(location);
 															if (filteredLocation != null) {
 
@@ -447,11 +433,9 @@ public class OpenGTStracker extends Service {
 
 														public void onProviderDisabled(
 																String provider) {
-															Log
-																	.d(
-																			TAG,
-																			"onProviderDisabled: "
-																					+ provider);
+															Log.d(TAG,
+																	"onProviderDisabled: "
+																			+ provider);
 															if (provider
 																	.equals("gps")) {
 																// switching to
@@ -463,13 +447,10 @@ public class OpenGTStracker extends Service {
 																		.getDefaultSharedPreferences(
 																				mContext)
 																		.edit();
-																pfEditor
-																		.putString(
-																				Const.PRECISION,
-																				Integer
-																						.toString(LOGGING_GLOBAL));
-																pfEditor
-																		.commit();
+																pfEditor.putString(
+																		Const.PRECISION,
+																		Integer.toString(LOGGING_GLOBAL));
+																pfEditor.commit();
 																// requestLocationUpdates();
 															}
 
@@ -477,11 +458,9 @@ public class OpenGTStracker extends Service {
 
 														public void onProviderEnabled(
 																String provider) {
-															Log
-																	.d(
-																			TAG,
-																			"onProviderEnabled: "
-																					+ provider);
+															Log.d(TAG,
+																	"onProviderEnabled: "
+																			+ provider);
 
 														}
 
@@ -489,14 +468,11 @@ public class OpenGTStracker extends Service {
 																String provider,
 																int status,
 																Bundle extras) {
-															Log
-																	.w(
-																			TAG,
-																			String
-																					.format(
-																							"Provider %s changed to status %d",
-																							provider,
-																							status));
+															Log.w(TAG,
+																	String.format(
+																			"Provider %s changed to status %d",
+																			provider,
+																			status));
 														}
 													};
 
@@ -510,14 +486,11 @@ public class OpenGTStracker extends Service {
 
 		if (proposedLocation != null
 				&& (proposedLocation.getAccuracy() > mMaxAcceptableAccuracy)) {
-			Log
-					.w(
-							TAG,
-							String
-									.format(
-											"A weak location was recieved, lots of inaccuracy... (%f is more then max %f)",
-											proposedLocation.getAccuracy(),
-											mMaxAcceptableAccuracy));
+			Log.w(TAG,
+					String.format(
+							"A weak location was recieved, lots of inaccuracy... (%f is more then max %f)",
+							proposedLocation.getAccuracy(),
+							mMaxAcceptableAccuracy));
 			return null;
 		}
 
@@ -527,15 +500,11 @@ public class OpenGTStracker extends Service {
 				&& mPreviousLocation != null
 				&& (proposedLocation.getAccuracy() > mPreviousLocation
 						.distanceTo(proposedLocation))) {
-			Log
-					.w(
-							TAG,
-							String
-									.format(
-											"A weak location was recieved, not quite clear from the previous waypoint... (%f more then max %f)",
-											proposedLocation.getAccuracy(),
-											mPreviousLocation
-													.distanceTo(proposedLocation)));
+			Log.w(TAG,
+					String.format(
+							"A weak location was recieved, not quite clear from the previous waypoint... (%f more then max %f)",
+							proposedLocation.getAccuracy(),
+							mPreviousLocation.distanceTo(proposedLocation)));
 			mPreviousLocation = proposedLocation;
 			return null;
 		}
@@ -669,6 +638,8 @@ public class OpenGTStracker extends Service {
 		TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 		mImei = telephonyManager.getDeviceId();
 		account = getResources().getString(R.string.account);
+		server = getResources().getString(R.string.server);
+
 		mLoggingState = Const.STOPPED;
 		mContext = getApplicationContext();
 		mSharedPreferences = PreferenceManager

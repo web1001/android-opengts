@@ -30,25 +30,37 @@ public class DevicesOverlay extends
 		final ArrayList<DeviceOverlayItem> devices = new ArrayList<DeviceOverlayItem>();
 
 		try {
-			URL url = new URL(server + "/image.dev?a=" + account + "&u=" + user
-					+ "&p=" + password + "&d=all");
+			URL url = new URL(server + "/Data.kml?a=" + account + "&u=" + user
+					+ "&p=" + password + "&l=1&g=all");
 
 			BufferedReader reader = new BufferedReader(new InputStreamReader(
 					url.openStream()));
 
-			String line = reader.readLine();
+			String line;
 
-			String[] values = line.split(",");
+			while ((line = reader.readLine()) != null) {
+				if (line.trim().startsWith("<name>")) {
+					line = line.substring(line.indexOf("me>") + 3);
 
-			int nr = Integer.parseInt(values[0]);
+					String name = line.substring(0, line.indexOf('<'));
+					Log.d("aGTS", "Found device " + name);
+					devices.add(DeviceOverlayItem.getInstance(osmv, server,
+							account, user, password, name));
+				}
+			}
 
-			for (int i = 1; i <= nr; i++)
-				devices.add(DeviceOverlayItem.getInstance(osmv, server,
-						account, user, password, values[i]));
+			// String[] values = line.split(",");
+
+			// int nr = Integer.parseInt(values[0]);
+
+			// for (int i = 1; i <= nr; i++)
+			// devices.add(DeviceOverlayItem.getInstance(osmv, server,
+			// account, user, password, values[i]));
 
 			reader.close();
 
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 
