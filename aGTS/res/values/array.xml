@@ -52,4 +52,21 @@
         <item>Mihai Csaky</item>
     </string-array>
 
+
+<string-array name="zoom_choices">
+<item>Contry (4)</item>
+<item>Region (9)</item>
+<item>Town (12)</item>
+<item>Street (15)</item>
+</string-array>
+
+<string-array name="zoom_values" translatable="false">
+<item>4</item>
+<item>9</item>
+<item>12</item>
+<item>15</item>
+</string-array>
+
 </resources>
+
+
