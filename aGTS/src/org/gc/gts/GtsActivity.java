@@ -85,7 +85,8 @@ public class GtsActivity extends Activity {
 
 	ctx = this;
 
-	mPrefs = getSharedPreferences(TAG, MODE_PRIVATE);
+	// mPrefs = getSharedPreferences(TAG, MODE_PRIVATE);
+	mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 	this.startService(new Intent(Const.SERVICENAME));
 	Log.w(TAG, "Service Started");
@@ -95,9 +96,12 @@ public class GtsActivity extends Activity {
 		    this.getComponentName(), PackageManager.GET_META_DATA);
 	    bundle = ai.metaData;
 
-	    Log.i("Bundle:account", bundle.getString("account"));
-	    Log.i("Bundle:user", bundle.getString("user"));
-	    Log.i("Bundle:password", bundle.getString("password"));
+	    // Log.i("Bundle:account", bundle.getString("account"));
+	    // Log.i("Bundle:user", bundle.getString("user"));
+	    // Log.i("Bundle:password", bundle.getString("password"));
+	    this.mDevicesOverlay = DevicesTraceOverlay.getInstance(ctx, mOsmv,
+		    bundle.getString("server"), bundle.getString("account"),
+		    bundle.getString("user"), bundle.getString("password"));
 	} catch (NameNotFoundException e) {
 	    e.printStackTrace();
 	}
@@ -110,10 +114,6 @@ public class GtsActivity extends Activity {
 		this.mOsmv);
 	this.mOsmv.setBuiltInZoomControls(true);
 	this.mOsmv.getOverlays().add(this.mLocationOverlay);
-
-	this.mDevicesOverlay = DevicesTraceOverlay.getInstance(ctx, mOsmv,
-		bundle.getString("server"), bundle.getString("account"),
-		bundle.getString("user"), bundle.getString("password"));
 
 	this.mOsmv.getOverlays().add(this.mDevicesOverlay);
 
@@ -131,9 +131,13 @@ public class GtsActivity extends Activity {
 
 	this.setContentView(rl);
 
-	ArrayList<GeoPoint> sir = mDevicesOverlay.getPath();
-
-	mOsmv.getController().setZoom(mPrefs.getInt("ZOOM_LEVEL", 15));
+	ArrayList<GeoPoint> sir = DevicesTraceOverlay.getPath();
+	/*
+	 * Log.w(TAG, "Zoom Level: " +
+	 * Integer.parseInt(mPrefs.getString("ZOOM_LEVEL", "15")));
+	 */
+	mOsmv.getController().setZoom(
+		Integer.parseInt(mPrefs.getString("ZOOM_LEVEL", "15")));
 	mOsmv.getController().setCenter(sir.get(0));
 	// mOsmv.scrollTo(mPrefs.getInt(PREFS_SCROLL_X, 0), mPrefs.getInt(
 	// PREFS_SCROLL_Y, 0));
