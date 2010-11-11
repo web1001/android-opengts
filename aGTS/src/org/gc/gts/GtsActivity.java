@@ -155,6 +155,7 @@ public class GtsActivity extends Activity {
     private int getZoom(ArrayList<GeoPoint> sir, GeoPoint center) {
 	// TODO Auto-generated method stub
 	// creaza un sir cu distantele pina la toate masinile
+	// cauta nivelul de zoom optim, functie de dimensiunea ecranului
 	Display display = getWindowManager().getDefaultDisplay();
 	int width = display.getWidth();
 	int height = display.getHeight();
