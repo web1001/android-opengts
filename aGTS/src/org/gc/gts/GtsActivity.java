@@ -3,6 +3,8 @@
 package org.gc.gts;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 
 import org.andnav.osm.util.GeoPoint;
 import org.andnav.osm.views.OpenStreetMapView;
@@ -23,6 +25,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.Display;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -132,16 +135,81 @@ public class GtsActivity extends Activity {
 	this.setContentView(rl);
 
 	ArrayList<GeoPoint> sir = DevicesTraceOverlay.getPath();
-	/*
-	 * Log.w(TAG, "Zoom Level: " +
-	 * Integer.parseInt(mPrefs.getString("ZOOM_LEVEL", "15")));
-	 */
-	mOsmv.getController().setZoom(
-		Integer.parseInt(mPrefs.getString("ZOOM_LEVEL", "15")));
-	mOsmv.getController().setCenter(sir.get(0));
+
+	GeoPoint center = getCenter(sir);
+
+	int zoom = Integer.parseInt(mPrefs.getString("ZOOM_LEVEL", "0"));
+	if (zoom == 0) {
+	    zoom = getZoom(sir, center);
+	}
+
+	Log.w(TAG, "Zoom Level: " + zoom);
+
+	mOsmv.getController().setZoom(zoom);
+	mOsmv.getController().setCenter(center);
 	// mOsmv.scrollTo(mPrefs.getInt(PREFS_SCROLL_X, 0), mPrefs.getInt(
 	// PREFS_SCROLL_Y, 0));
 
+    }
+
+    private int getZoom(ArrayList<GeoPoint> sir, GeoPoint center) {
+	// TODO Auto-generated method stub
+	// creaza un sir cu distantele pina la toate masinile
+	Display display = getWindowManager().getDefaultDisplay();
+	int width = display.getWidth();
+	int height = display.getHeight();
+	int mix = Math.min(width, height);
+
+	ArrayList<Integer> distances = new ArrayList<Integer>();
+	Iterator<GeoPoint> it = sir.iterator();
+	while (it.hasNext()) {
+	    distances.add(center.distanceTo(it.next()));
+	}
+	int max_distance = Collections.max(distances);
+	int dpixel = max_distance / mix;
+	Log.w(TAG, "Distance per pixel: " + dpixel);
+
+	if (dpixel < 2)
+	    return 15;
+	else if (dpixel < 5)
+	    return 14;
+	else if (dpixel < 15)
+	    return 13;
+	else if (dpixel < 25)
+	    return 12;
+	else if (dpixel < 45)
+	    return 11;
+	else if (dpixel < 95)
+	    return 10;
+	else if (dpixel < 190)
+	    return 9;
+	else
+
+	    return 4;
+    }
+
+    private GeoPoint getCenter(ArrayList<GeoPoint> sir) {
+	// method to return the centre of locations
+	int min_latitude, max_latitude, min_longitude, max_longitude;
+
+	ArrayList<Integer> latitude = new ArrayList<Integer>();
+	ArrayList<Integer> longitude = new ArrayList<Integer>();
+	Iterator<GeoPoint> it = sir.iterator();
+	while (it.hasNext()) {
+	    GeoPoint gp = it.next();
+	    latitude.add(gp.getLatitudeE6());
+	    longitude.add(gp.getLongitudeE6());
+	}
+	max_latitude = Collections.max(latitude);
+	min_latitude = Collections.min(latitude);
+
+	max_longitude = Collections.max(longitude);
+	min_longitude = Collections.min(longitude);
+
+	GeoPoint mean = new GeoPoint((max_latitude + min_latitude) / 2,
+		(max_longitude + min_longitude) / 2);
+	Log.w(TAG, "Center =  " + mean.toString());
+	return mean;
     }
 
     @Override

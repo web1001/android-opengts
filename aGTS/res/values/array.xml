@@ -54,6 +54,7 @@
 
 
 <string-array name="zoom_choices">
+<item>Auto</item>
 <item>Contry (4)</item>
 <item>Region (9)</item>
 <item>Town (12)</item>
@@ -61,6 +62,7 @@
 </string-array>
 
 <string-array name="zoom_values" translatable="false">
+<item>0</item>
 <item>4</item>
 <item>9</item>
 <item>12</item>
