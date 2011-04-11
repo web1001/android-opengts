@@ -39,7 +39,6 @@ public class LatitudeOverlay extends
 		return new LatitudeOverlay(ctx, latitude, ctx.getResources()
 				.getDrawable(R.drawable.phone), new Point(8, 8),
 				new LatitudeOverlay.OnItemTapListener<LatitudeOverlayItem>() {
-					@Override
 					public boolean onItemTap(int index, LatitudeOverlayItem item) {
 						Log.i("aGTS", "" + item.mTitle + ": "
 								+ item.mDescription);

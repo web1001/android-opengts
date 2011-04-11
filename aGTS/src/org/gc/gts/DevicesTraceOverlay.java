@@ -120,7 +120,6 @@ public class DevicesTraceOverlay extends
 				ctx.getResources().getDrawable(R.drawable.car),
 				new Point(8, 8),
 				new DevicesTraceOverlay.OnItemTapListener<DeviceTraceOverlayItem>() {
-					@Override
 					public boolean onItemTap(int index,
 							DeviceTraceOverlayItem item) {
 						Log.i("aGTS", "" + item.mTitle + ": "

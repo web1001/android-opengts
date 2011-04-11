@@ -80,7 +80,6 @@ public class LatitudeOverlayItem extends OpenStreetMapViewOverlayItem implements
 	public void startThread(final OpenStreetMapView osmv, final String user) {
 		Thread thread = new Thread(new Runnable() {
 
-			@Override
 			public void run() {
 				while (true) {
 					try {

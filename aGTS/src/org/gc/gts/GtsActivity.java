@@ -383,7 +383,6 @@ public class GtsActivity extends Activity {
 
 	    routeDialog.setItems(items, new DialogInterface.OnClickListener() {
 
-		@Override
 		public void onClick(DialogInterface dialog, int which) {
 		    from = null;
 
@@ -408,7 +407,6 @@ public class GtsActivity extends Activity {
 	    routeToDialog.setItems(mDevicesOverlay.getItems(),
 		    new DialogInterface.OnClickListener() {
 
-			@Override
 			public void onClick(DialogInterface dialog, int which) {
 			    to = mDevicesOverlay.getLocation(which);
 

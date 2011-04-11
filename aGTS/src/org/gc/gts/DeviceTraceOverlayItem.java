@@ -90,7 +90,6 @@ public class DeviceTraceOverlayItem extends OpenStreetMapViewOverlayItem
 			final String device) {
 		Thread thread = new Thread(new Runnable() {
 
-			@Override
 			public void run() {
 				while (true) {
 					try {
