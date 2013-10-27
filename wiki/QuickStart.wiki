@@ -10,8 +10,6 @@ Settings
 
 To configure your server, OpenGTS account, user and password, please check `AndroidManifest.xml` and `gtsvalues.xml`
 
-Of course, we provide a free server for test and private use only at:
 
-[http://www.sysoptrack.org/ SysopTrack.org]
 
 Update: now works with latest OpenGTS (2.2.8), gprmc and events servlets.
